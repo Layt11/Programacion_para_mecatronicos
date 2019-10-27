@@ -10,16 +10,16 @@ float Vb;
 int Vbchk = false;
 float Ve;
 int Vechk = false;
-float Vbb;      
-int Vbbchk;      
+float Vbb;
+int Vbbchk = false;
 float Re;    
 int Rechk = false;
 float Vin;      
 int Vinchk= false;
 float Vout; 
 int Voutchk = false;
-float Vc;      
-int Vcchk;     
+float Vc;
+int Vcchk = false;
 float Ic;      
 int Icchk = false;
 float R1;       
@@ -38,19 +38,21 @@ float Ie;
 int Iechk = false;
 float Ib;
 int Ibchk = false;
-//Utiles
+float Vg;
+//Variables utiles
 float result;     // Almacena el resultado para despues desplegarlo
 char entrada[30]; // Para recibir la entrada.
+char name[30];        //Variable para guardar el nombre del componente.
 char resp;        // Para recibir la respuesta.
-char name1;     //Variable para guardar el nombre del componente.
 int number;     //Varible use to concatenate
 int pdecimal = 0;
 int corrido;
-int fila_o_columna = 0; //flag for dermine if is a fila or column
-int flag_igual_en_contrado = false; //flag of "=" find
+int flag_igual_encontrado = false; //flag of "=" find
+float formula[3]; // Este vector numera las variables que ya hay para usar una formula o no.
 int end_of_valor = false;          //flag of end of valor
 
-void clearvariables() {
+int clearvariables(f) 
+{
     Vb = 0;
     Ve =0;
     Vbb = 0;
@@ -67,232 +69,123 @@ void clearvariables() {
     Rc = 0;
     Ie = 0;
     Ib = 0;
+    Vg = 0;
+    for (f = 0; f < 3; f++)
+        formula[f] = 0;
 }
 
-void Asignarnombre(){
-    switch (name1)
-    {
-    case 'clear':
-       clearvariables()
-        break;
-    case 'Vc':
-        Vc = number; // Mete el valor introducido en la variable correspondiente.
-        Vcchk = true; // Activa la variable como 'Ya ha sido introducida'.
-        break;
-    case 'vc':
-        Vc = number;
-        Vcchk = true;
-        break;
-    case 'Vb':
-        Vb = number;
-        Vbchk = true;
-        break;
-    case 'Ve':
-        Ve = number;
-        Vechk = true;
-        break;
-    case 'Ic':
-        Ic = number;
-        Icchk = true;
-        break;
-    case 'ic':
-        Ic = number;
-        Icchk = true;
-        break;
-    case 'Vbb':
-        Vbb = number;
-        Vbbchk = true;
-        break;
-    case 'Re':
-        Re = number;
-        Rechk = true;
-        break;
-    case 'Vin':
-        Vin = number;
-        Vinchk = true;
-        break;
-    case 'Vout':
-        Vout = number;
-        Voutchk = true;
-        break;
-    case 'Vc':
-        Vc = number;
-        Vcchk = true;
-        break;
-    case 'R1':
-        R1 = number;
-        R1chk = true;
-        break;
-    case 'R2':
-        R2 = number;
-        R2chk = true;
-        break;
-    case 'RL':
-        RL = number;
-        RLchk = true;
-        break;
-    case 'RC':
-        Rc = number;
-        Rcchk = true;
-        break;
-    case 'C1':
-        C1 = number;
-        C1chk = true;
-        break;
-    case 'C1':
-        C2 = number;
-        C2chk = true;
-        break;
-    case 'Ie':
-        Ie = number;
-        Iechk = true;
-        break;
-    default:
-        printf ("El valor ingresado no es reconocido")
-        break;
-    }
-} 
-
-void evaluarbuscado(){
-    switch (name1)
-    {
-    case 'Vc':
-        if (Vbbchk == true) { //Evalua si los valores necesarios para encontrar a Vc han sido agregados
-            if (Icchk == true){
-                if (Rcchk == true)
-                {
-                    result = Vbb - (Ic*Rc); // Como todos los datos han sido agregados, hace la operacion
-                    printf ("El valor de Vc es: %.2f", result);
-                }
-                else
-                {
-                    printf("Falta el valor de Ic");
-                }
-            }
-            else {
-                printf("Falta el valor de Ic"); // Si un valor no ha sido introducido, le dice al usuario que este valor falta
-            }
-        }
-        else {
-            printf ("Falta el valor de Vbb");
-        }
-        break;
-    case 'Vb':
-        if (Vechk == true){
-            result= Ve + 0.6;
-        }
-        else 
-        printf("Falta Ve");
-        break;
-    case 'Ve':
-        if (Vbchk == true)
-        {
-            result = 0.6 - Ve;
-        }
-        else
-            printf("Falta Vb");
-        break;
-    case 'Ic':
-        
-        break;
-    case 'Vbb':
-
-        break;
-    case 'Re':
-
-        break;
-    case 'Vin':
-
-        break;
-    case 'Vout':
-
-        break;
-    case 'R1':
-        if (R2chk == true)
-        {
-            if (Vbbchk == true)
-            {
-                if (Icchk == true)
-                {
-                    result = (Vbb / (10 * Ic / 100)) - R2;
-                    printf("El valor de R1 es: %.2f", result);
-                }
-                else
-                {
-                    printf("Falta el valor de Ic");
-                }
-            }
-            else
-            {
-                printf("Falta el valor de Vbb");
-            }
-        }
-        else
-        {
-            printf("Falta el valor de R2");
-        }
-        break;
-    case 'R2':
-        if (R1chk == true)
-        {
-            if (Vbbchk == true)
-            {
-                    if (Icchk == true)
-                    {
-                        result = (Vbb / (10 * Ic / 100)) - R1;
-                        printf("El valor de R2 es: %.2f", result);
-                    }
-                    else
-                    {
-                        printf("Falta el valor de Ic");
-                    }
-            }
-            else
-            {
-                printf("Falta el valor de Vbb");
-            }
-            
-        }
-        else {
-            printf ("Falta el valor de R1");
-        }
-        break;
-    case 'RC':
-        //No tengo la ecuacion
-        break;
-    case 'C1':
-        //No tengo la ecuacion
-        break;
-    case 'C1':
-        //No tengo la ecuacion
-        break;
-    case 'Ie':
-        if (Icchk == true )
-        {
-            if (Ibchk == true)
-            {
-                result = (Ic + Ib);
-                printf("El valor de Ie es: %.2f", result);
-            }
-            else
-            {
-                printf("Falta el valor de Ib");
-            }
-        }
-        else
-        {
-            printf("Falta el valor de Ic");
-        }
-        break;
-    default:
-        break;
-    }
-}
-/* Verified if the input is a number*/
-int check_if_a_number(char num)
+void analiceVb()
 {
-    if (is_a_number)
-    concatenar(num);
+    while (Vbchk == false) //Evalua si los valores necesarios para encontrar a Ve han sido agregados
+    {
+        // Si un valor no ha sido introducido, le dice al usuario que este valor falta
+        printf("El valor de 'Vb' es faltante, por favor intruzca su valor.\n");
+        scanf("%s", entrada);
+        parser();
+    }
+}
+void analiceIe(){
+    while (Iechk == false)
+    {
+        printf("El valor de 'Ie' es faltante, por favor intruzca su valor.\n");
+        scanf("%s", entrada);
+        parser();
+    }
+}
+void analiceIc()
+{
+    while (Icchk == false)
+    {
+        printf("El valor de 'Ic' es faltante, por favor intruzca su valor.\n");
+        scanf("%s", entrada);
+        parser();
+    }
+}
+void analiceIb()
+{
+    while (Ibchk == false)
+    {
+        printf("El valor de 'Ib' es faltante, por favor intruzca su valor.\n");
+        scanf("%s", entrada);
+        parser();
+    }
+}
+void analiceVout()
+{
+    while (Voutchk == false)
+    {
+        printf("El valor de 'Vout' es faltante, por favor intruzca su valor.\n");
+        scanf("%s", entrada);
+        parser();
+    }
+}
+void analiceRc()
+{
+    while (Rcchk == false)
+    {
+        printf("El valor de 'Rc' es faltante, por favor intruzca su valor.\n");
+        scanf("%s", entrada);
+        parser();
+    }
+}
+void analiceVbb()
+{
+    while (Vbbchk == false)
+    {
+        printf("El valor de 'Vbb' es faltante, por favor intruzca su valor.\n");
+        scanf("%s", entrada);
+        parser();
+    }
+}
+void analiceVc()
+{
+    while (Vcchk == false)
+    {
+        printf("El valor de 'Vc' es faltante, por favor intruzca su valor.\n");
+        scanf("%s", entrada);
+        parser();
+    }
+}
+void analiceRe()
+{
+    while (Rechk == false)
+    {
+        printf("El valor de 'Re' es faltante, por favor intruzca su valor.\n");
+        scanf("%s", entrada);
+        parser();
+    }
+}
+void analiceR1()
+{
+    while (R1chk == false)
+    {
+        printf("El valor de 'R1' es faltante, por favor intruzca su valor.\n");
+        scanf("%s", entrada);
+        parser();
+    }
+}
+void analiceR2()
+{
+    while (R2chk == false)
+    {
+        printf("El valor de 'R2' es faltante, por favor intruzca su valor.\n");
+        scanf("%s", entrada);
+        parser();
+    }
+}
+void analiceVe()
+{
+    while (Vechk == false)
+    {
+        printf("El valor de Vb es faltante, por favor intruzca su valor.\n");
+        scanf("%s", entrada);
+        parser();
+    }
+}
+void DesplegarIc() // Esto lo convirte en mA de nuevo y lo despliega
+{ 
+    result *= 100;
+    printf("Ic = %.2fmA\n", result);
 }
 
 float concatenar(float num)
@@ -300,65 +193,324 @@ float concatenar(float num)
     if (pdecimal == 1) // Cuando esta encendido concatena los valores como decimales
     {
         corrido = corrido * 0.1;
-        num -= '0';                         //Convercion de char a entero
-        return ((num * corrido) + number); //Concatenarlo como un numero decimal
+        num -= '0';                          //Convercion de char a entero
+        number = ((num * corrido) + number); //Concatenarlo como un numero decimal
     }
     else if (num != 46) // Si es un numero entero pasa por este proceso.
     {
         num -= '0'; //Convercion de char a entero
-        return ((number * 10) + num);
+        number = ((number * 10) + num);
     }
     else // Cuando recibe el punto enciende el Pdecimal.
-    pdecimal = 1;
+    {
+        pdecimal = 1;
+    }
     corrido = 1.0; // Resetea el corrido para el siguiente numero.
-    num = num1[n]; // Para que no haga un tollo, porque lo hace.
 }
 
-void parser(char entrada[])
-{
-    int i;
+void Asignarnombre(){
 
-    while (end_of_valor == false) //Check flag for en of matrix if end exit
+    if ((strcmp(name, "Vc") == 0) || (strcmp(name, "vc") == 0))
     {
-        if (flag_igual_en_contrado == false) //if sing of '=' is found flag go true and don't execute
+        Vc = number;  // Mete el valor introducido en la variable correspondiente.
+        Vcchk = true; // Activa la variable como 'Ya ha sido introducida'.
+        formula[1] = formula[1] + 1; // aumenta el conteo de variables para esa formula. UNA VARIABLE PUEDE ESTAR EN DOS FORMULAS
+    }
+    else if ((strcmp(name, "Vb") == 0) || (strcmp(name, "vb") == 0))
+    {
+        Vb = number;  
+        Vbchk = true; 
+    }
+    else if ((strcmp(name, "Ve") == 0) || (strcmp(name, "ve") == 0))
+    {
+        Ve = number;
+        Vechk = true;
+    }
+    else if ((strcmp(name, "Ic") == 0) || (strcmp(name, "ic") == 0))
+    {
+        Ic = number;
+        Icchk = true;
+        formula[2] = formula[2] + 1.5;
+        formula[1] = formula[1] + 1;
+    }
+    else if ((strcmp(name, "Vbb") == 0) || (strcmp(name, "vbb") == 0))
+    {
+        Vbb = number;
+        Vbbchk = true;
+        formula[1] = formula[1] + 1;
+    }
+    else if ((strcmp(name, "Re") == 0) || (strcmp(name, "re") == 0))
+    {
+        Re = number;
+        Rechk = true;
+    }
+    else if ((strcmp(name, "Vin") == 0) || (strcmp(name, "vin") == 0))
+    {
+        Vin = number;
+        Vinchk = true;
+    }
+    else if ((strcmp(name, "Vout") == 0) || (strcmp(name, "vout") == 0))
+    {
+        Vout = number;
+        Voutchk = true;
+        formula[2] = formula[2] + 1.5;
+    }
+    else if ((strcmp(name, "R1") == 0) || (strcmp(name, "r1") == 0))
+    {
+        R1 = number;
+        R1chk = true;
+    }
+    else if ((strcmp(name, "R2") == 0) || (strcmp(name, "r2") == 0))
+    {
+        R2 = number;
+        R2chk = true;
+    }
+    else if ((strcmp(name, "RL") == 0) || (strcmp(name, "rl") == 0))
+    {
+        RL = number;
+        RLchk = true;
+    }
+    else if ((strcmp(name, "Rc") == 0) || (strcmp(name, "rc") == 0))
+    {
+        Rc = number;
+        Rcchk = true;
+        formula[2] = formula[2] + 1.5; // Como la formula 3 tiene 3 variables debe contarlas por 1.5
+        formula[1] = formula[1] + 1; // Como la formula 2 tiene 2 variables debe contarlas por 1
+    }
+    else if ((strcmp(name, "C1") == 0) || (strcmp(name, "c1") == 0))
+    {
+        C1 = number;
+        C1chk = true;
+    }
+    else if ((strcmp(name, "Ie") == 0) || (strcmp(name, "ie") == 0))
+    {
+        Ie = number;
+        Iechk = true;
+        formula[0] = formula[0] + 1.5;
+    }
+    else if ((strcmp(name, "Ib") == 0) || (strcmp(name, "ib") == 0))
+    {
+        Ib = number;
+        Ibchk = true;
+        formula[0] = formula[0] + 1.5;
+    }
+    else
+    {
+        printf("El valor ingresado no es reconocido");
+    }  
+} 
+
+void evaluarbuscado(){
+
+    if ((strcmp(name, "Ve") == 0) || (strcmp(name, "ve") == 0))
+    {
+        analiceVb();
+        result = Vb - 0.6; // Como todos los datos han sido agregados, hace la operacion
+        printf("Ve = %.2f\n", result);
+    }
+    else if ((strcmp(name, "Vb") == 0) || (strcmp(name, "vb") == 0))
+    {
+        analiceVe();
+        result = Ve + 0.6;
+        printf("Vb = %.2f\n", result);
+    }
+    else if ((strcmp(name, "Vc") == 0) || (strcmp(name, "vc") == 0))
+    {
+        analiceVbb();
+        analiceRc();
+        analiceIc();
+        result = Vbb - (Ic * Rc);
+        printf("Vc = %.2f\n", result);
+    }
+    else if ((strcmp(name, "R1") == 0) || (strcmp(name, "r1") == 0))
+    {
+        analiceR2();
+        analiceVbb();
+        analiceIc();
+        result = (Vbb / (10 * Ic / 100)) - R2;
+        printf("R1 = %.2f\n", result);
+    }
+    else if ((strcmp(name, "R2") == 0) || (strcmp(name, "r2") == 0))
+    {
+        analiceVbb();
+        analiceR1();
+        analiceIc();
+        result = (Vbb / (10 * Ic / 100)) - R1;
+        printf("R2 = %.2f\n", result);
+    }
+    else if ((strcmp(name, "Ie") == 0) || (strcmp(name, "ie") == 0))
+    {
+        analiceIb();
+        analiceIc();
+        result = (Ic + Ib);
+        printf("Ie = %.2f\n", result);
+    }
+    else if ((strcmp(name, "Ic") == 0) || (strcmp(name, "ic") == 0))
+    {
+        if ((formula[0] > formula[1]) && formula[0] > formula[2])
+        {
+            analiceIe();
+            analiceIb();
+            result = (Ie - Ib);
+            DesplegarIc();
+        }
+        else if (formula[1] > formula[2])
+        {
+            analiceVbb();
+            analiceVc();
+            analiceRc();
+            result = ((Vbb - Vc) / Rc);
+            DesplegarIc();
+        }
+        else if (formula[2] > formula[1])
+        {
+            analiceVout();
+            analiceRc();
+            result = (Vout / Rc);
+            DesplegarIc();
+        }
+        else
+        {
+            analiceIe();
+            analiceIb();
+            result = (Ie - Ib);
+            DesplegarIc();
+        }           
+    }
+    else if ((strcmp(name, "Ib") == 0) || (strcmp(name, "ib") == 0))
+    {
+        analiceIe();
+        analiceIc();
+        result = (Ie - Ic);
+        printf("Ib = %.2f\n", result);
+    }
+    else if ((strcmp(name, "Vbb") == 0) || (strcmp(name, "vbb") == 0))
+    {
+        analiceVc();
+        analiceIc();
+        analiceRc();
+        result = Vc + (Ic*Rc);
+        printf("Vbb = %.2f\n", result);
+    }
+    else if ((strcmp(name, "Rc") == 0) || (strcmp(name, "rc") == 0))
+    {
+        if (formula[1] > formula[2])
+        {
+            analiceVc();
+            analiceIc();
+            analiceVbb();
+            result = (Vbb - Vc) / Ic;
+            printf("Rc = %.2f\n", result);
+        }
+        else if (formula[2] > formula[1])
+        {
+            analiceVout();
+            analiceIc();
+            result = (Vout / Ic);
+            printf("Rc = %.2f\n", result);
+        }
+        else
+        {
+            analiceVout();
+            analiceIc();
+            result = (Vout / Ic);
+            printf("Rc = %.2f\n", result);
+        }       
+    }
+    else if ((strcmp(name, "Vg") == 0) || (strcmp(name, "vg") == 0))
+    {
+        analiceRc();
+        analiceRe();
+        result = (-Rc / Re);
+        printf("Ganacia de voltaje = %.2f\n", result);
+    }
+    else if ((strcmp(name, "Vout") == 0) || (strcmp(name, "vout") == 0))
+    {
+        analiceIc();
+        analiceRc();
+        result = (Ic * Rc);
+        printf("Vout = %.2f\n", result);
+    }
+    // else if ((strcmp(name, "Re") == 0) || (strcmp(name, "re") == 0))
+    // {
+    //     //No tengo la ecuacion
+    // }
+    // else if ((strcmp(name, "Vin") == 0) || (strcmp(name, "vin") == 0))
+    // {
+    //     //No tengo la ecuacion
+    // }
+    // else if ((strcmp(name, "C1") == 0) || (strcmp(name, "c1") == 0))
+    // {
+    //     //No tengo la ecuacion
+    // }
+}
+/* Verifies if the input is a number*/
+int check_if_a_number(char num)
+{
+    if (is_a_number)
+    concatenar(num);
+}
+void parser(f)
+{
+    for (f = 0; f < 30; f++)
+        name[f] = 0;
+    int i=0; // Esta y las siguientes dos lineas funcionan como un offset para el parser
+    number = 0;
+    end_of_valor= false; 
+    flag_igual_encontrado = false;
+    while (end_of_valor == false) //Checks flag for end of valor (if end then exit)
+    {
+        if (flag_igual_encontrado == false) //if sing of '=' is found flag go true and don't execute
         {
             while (entrada[i] != '=') //Look for sing of '='
             {
-                strcat(name1, entrada[i]); //Guarda el nombre de lo ingresado.
+                name[i] = entrada[i]; //Guarda el nombre de lo ingresado.
                 i++;
             }
-            i++;
-            flag_igual_en_contrado = true;
+            flag_igual_encontrado = true;
         }
         i++;
-
         switch (entrada[i]) //look in array if we have "[k,mA] defult look if a number"
         {
         case 'K':
-            // number *= 1000;
         case 'k':
-            // number *= 1000;
+            number *= 1000;
+            break;
+        case ' ':
+            break;
         case 'm':
+            break;
         case 'A':
-            // number = number/100;
+            number = number/100;
             break;
         case '?':
-            resp = 'N';
             evaluarbuscado();
+            end_of_valor = true;
+            break;
+        case '\0':
+            end_of_valor = true;
             break;
         default:
             check_if_a_number(entrada[i]);
             break;
         }
     }
+    Asignarnombre();
 }
 int main(int argc, char const *argv[])
 {
-    printf("Introdusca el valor\n");
-    while (resp != 'N'){
+    printf("Introduzca el valor\n");
+    while (resp != 'N')
+    {
         scanf("%s", entrada);
-        parser(entrada);
-        Asignarnombre();
+        if ((strcmp(entrada, "clear") == 0) || (strcmp(name, "Clear") == 0))
+        {
+            clearvariables(); //Limpia todas las variables
+        }
+        else
+        {
+            parser(entrada);
+        }        
     }
     return 0;
 }
